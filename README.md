@@ -23,6 +23,8 @@ Defense-in-depth building blocks against automated reverse-engineering tooling
 
 Full write-up with the threat model and per-tool mapping: [`docs/guide.md`](docs/guide.md).
 
+**Read this too:** every technique here can be bypassed — see [`docs/WEAKNESSES.md`](docs/WEAKNESSES.md) for exactly how, and what residual value each one keeps.
+
 ## Design rules (apply to every layer)
 1. **Combine layers.** Static obfuscation alone falls to runtime capture; anti-debug
    alone falls to static patching. Use static + dynamic + integrity together.
