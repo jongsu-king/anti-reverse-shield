@@ -176,3 +176,104 @@ libc 함수의 첫 바이트가 점프 계열 opcode인지 검사해 그 흔적�
 
    공격자는 "체크 한 줄"이 아니라 "의미 전체"를 이해해야 하므로 비용이 급증한다.
 ```
+
+---
+
+## 9. 서버측 HMAC 검증 — 패치 불가능한 유일한 경계 (`server/verify.py`)
+
+클라이언트 체크는 공격자 기기에서 돌아 전부 패치 가능하지만, 이건 서버에서 돈다.
+
+```
+   CLIENT (신뢰 불가)                          SERVER (신뢰 경계)
+   ==================                          =================
+   body  = {"action":"unlock","sku":"pro"}
+   nonce = 랜덤 32hex (1회용)
+   ts    = now
+   sig   = HMAC_SHA256(mac_key, body‖nonce‖ts)
+        |
+        |====== pinned TLS + (선택)페이로드 암호화 ======>
+        |                                        |
+        |                                   1) |now-ts| > skew ?  --yes--> [REJECT: stale]
+        |                                        | no
+        |                                   2) nonce 재사용 ?     --yes--> [REJECT: replay]
+        |                                        | no
+        |                                   3) HMAC 재계산 == sig ? --no--> [REJECT: forged]
+        |                                        | yes
+        |   <==== 서버 서명 capability 토큰 ======  [OK] (짧은 수명·범위 한정)
+        v
+   클라이언트엔 NOP 할 "boolean"이 없다 — 답이 네트워크 건너편에 있으므로.
+```
+
+---
+
+## 10. Electron fuses — "run as node" 덤프 경로를 컴파일 단계에서 제거
+
+```
+   공격자: ELECTRON_RUN_AS_NODE=1 ./YourApp      (또는 --inspect)
+        |
+        v
+   [기본값]  앱이 "그냥 node"로 부팅 → require 캐시/모듈 통째 덤프  ===> 소스 유출
+   ----------------------------------------------------------------------------
+   [fuses]   RunAsNode=false, EnableNodeCliInspectArguments=false
+        |
+        v
+   그 능력 자체가 바이너리에서 빠짐 → 덤프 경로 없음  ===> [BLOCKED]
+   + EnableEmbeddedAsarIntegrityValidation: asar 헤더 해시 검증
+   + OnlyLoadAppFromAsar: 아카이브 밖 코드 로드 금지
+```
+
+---
+
+## 11. Frida 탐지 — `/proc/self/maps` 스캔 (인라인 훅과는 다른 벡터)
+
+```
+   Frida가 붙으면 에이전트 .so 가 프로세스 주소공간에 매핑된다:
+
+   /proc/self/maps
+   ---------------------------------------------------------
+   7f..  r-xp  /usr/lib/libc.so.6
+   7f..  r-xp  /tmp/frida-<rand>/frida-agent.so   <-- "frida"
+   7f..  rw-p  [ gum-js-loop 스레드 힙 ]           <-- "gum-js"
+   7f..  r-xp  /data/local/tmp/re.frida.gadget    <-- "gadget"
+        |
+        v
+   문자열 매칭(frida/gum-js/gadget/linjector) 히트 -> [DETECTED]
+
+   우회: gadget 리네임, fopen/read 후킹으로 maps 필터링
+   -> 그래서 11은 1(인라인 훅)·2(안티디버그)와 "겹쳐서" 쓴다.
+```
+
+---
+
+## 12. 타이밍 이상 — 단일 스텝/브레이크포인트 탐지 (`ars_timing_anomaly()`)
+
+```
+   측정: ~1000회 덧셈 전후의 monotonic clock 차이(Δt)
+
+   정상 실행      |·|                      Δt ≈ 수 µs
+   -----------------------------------------------------------
+   단일 스텝/BP   |······ ······ ·······|  Δt ≈ 수 ms (수백~수천 배)
+                  ^ 디버거가 매 명령마다 개입
+
+   Δt > 2ms  ->  [ANOMALY]  (누군가 한 명령씩 지켜보는 중)
+   * 부하 높은 환경의 오탐 여지가 있어 단독 판정엔 쓰지 않음.
+```
+
+---
+
+## 13. 탐지 집계 — `ars_scan()` 와 플래그 비트마스크
+
+```
+   ars_scan()
+     ├─ ars_is_debugged()    --true--> | FLAG_DEBUGGER (1<<0)
+     ├─ ars_frida_present()  --true--> | FLAG_FRIDA    (1<<1)
+     ├─ ars_hooks_present()  --true--> | FLAG_HOOK     (1<<2)
+     └─ ars_timing_anomaly() --true--> | FLAG_TIMING   (1<<3)
+                                       v
+                                  unsigned flags  (여러 벡터 OR 합)
+                                       |
+          flags != 0 이면 즉시 종료 대신 ->  ars_react(value)  (8번 참조)
+
+   설계 원칙: (a) 벡터를 여러 개 OR 로 모아 한 개를 패치해도 다른 게 남게,
+             (b) 이 호출을 한 곳에 몰지 말고 여러 지점에 분산.
+```
