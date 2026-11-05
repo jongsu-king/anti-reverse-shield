@@ -16,6 +16,8 @@ Protocol (client -> server), all over pinned TLS:
 The server rejects: bad signature, stale timestamp, or replayed nonce.
 Run `python3 -m pytest` style check at the bottom via `python3 verify.py`.
 """
+from __future__ import annotations
+
 import hmac
 import hashlib
 import time

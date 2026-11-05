@@ -3,7 +3,7 @@ title: "anti-reverse-shield: a defense-in-depth anti-reversing / anti-tamper too
 message: "If you use this software, please cite it using these metadata."
 type: software
 authors:
-  - alias: jongsu-king
+  - name: "jongsu-king"
     website: "https://github.com/jongsu-king"
 repository-code: "https://github.com/jongsu-king/anti-reverse-shield"
 abstract: >-
