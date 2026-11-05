@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ConfuserEx project. anti-tamper + constants are what actually stop dnSpy;
+     rename alone leaves your logic readable. -->
+<project outputDir="./out" baseDir="." xmlns="http://confuser.codeplex.com">
+  <module path="MyApp.dll">
+    <rule pattern="true" preset="aggressive">
+      <protection id="anti debug" />
+      <protection id="anti dump" />
+      <protection id="anti ildasm" />
+      <protection id="anti tamper" />
+      <protection id="constants" />
+      <protection id="ctrl flow" />
+      <protection id="ref proxy" />
+      <protection id="rename" />
+      <protection id="resources" />
+    </rule>
+  </module>
+</project>

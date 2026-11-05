@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/xml/network_security_config.xml
+     Block cleartext + pin the server cert to defeat MITM proxies (mitmproxy).
+     Reference it from AndroidManifest: android:networkSecurityConfig="@xml/network_security_config" -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">api.example.com</domain>
+        <pin-set expiration="2027-01-01">
+            <!-- SHA-256 of the SubjectPublicKeyInfo. Keep a BACKUP pin for rotation. -->
+            <pin digest="SHA-256">REPLACE_WITH_BASE64_SPKI_PIN==</pin>
+            <pin digest="SHA-256">REPLACE_WITH_BACKUP_SPKI_PIN==</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>

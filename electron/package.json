@@ -1,0 +1,16 @@
+{
+  "name": "anti-reverse-shield-electron",
+  "version": "0.1.0",
+  "description": "Anti-reversing helpers for Electron apps",
+  "license": "MIT",
+  "scripts": {
+    "obfuscate": "javascript-obfuscator ./src --config ./build/obfuscate.config.js --output ./dist",
+    "bytecode": "node ./build/build-bytecode.js",
+    "fuses": "node ./build/fuses.js"
+  },
+  "devDependencies": {
+    "@electron/fuses": "^1.8.0",
+    "bytenode": "^1.5.7",
+    "javascript-obfuscator": "^4.1.1"
+  }
+}
