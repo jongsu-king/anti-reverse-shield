@@ -20,7 +20,4 @@ keywords:
   - reverse-engineering-defense
 license: MIT
 version: 0.2.0
-# DOI: filled in automatically by Zenodo on the first GitHub release once the
-# Zenodo-GitHub integration is enabled for this repository. Replace the line
-# below with: doi: 10.5281/zenodo.XXXXXXX
-# doi: 10.5281/zenodo.0000000
+doi: 10.5281/zenodo.23970279
