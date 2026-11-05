@@ -21,7 +21,7 @@ REA는 **정적 추출 → 런타임 관찰 → AI 재구성**의 3단 파이프
 
 ## 0. REA 아키텍처 해부 (무엇을 상대하는가)
 
-- **형태:** 단일 **MCP 서버** + AI 에이전트(Claude Code / Codex / Cursor / Gemini CLI / Grok) +
+- **형태:** 단일 **MCP 서버** + 범용 AI 코딩 에이전트 +
   외부 RE 툴 오케스트레이션. `npx rea-agents setup`으로 MCP 등록 + 워크플로우 지침 설치.
 - **조사 루프:** 에이전트가 로컬 타깃 지정 → REA가 `inspect` + `trace` → findings(코드,
   references, **unknowns**) 반환 → 에이전트가 설명·구현·테스트. HAR을 AgentEnv/Docker

@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: "anti-reverse-shield: a defense-in-depth anti-reversing / anti-tamper toolkit"
+message: "If you use this software, please cite it using these metadata."
+type: software
+authors:
+  - alias: jongsu-king
+    website: "https://github.com/jongsu-king"
+repository-code: "https://github.com/jongsu-king/anti-reverse-shield"
+abstract: >-
+  Cross-platform anti-reverse-engineering and anti-tamper building blocks for
+  native (C/C++), Electron/JavaScript, Android, and .NET targets, with a
+  threat-model analysis of automated AI reverse-engineering pipelines and an
+  honest account of each defense's limitations.
+keywords:
+  - anti-reversing
+  - anti-tamper
+  - obfuscation
+  - anti-debugging
+  - software-protection
+  - reverse-engineering-defense
+license: MIT
+version: 0.2.0
+# DOI: filled in automatically by Zenodo on the first GitHub release once the
+# Zenodo-GitHub integration is enabled for this repository. Replace the line
+# below with: doi: 10.5281/zenodo.XXXXXXX
+# doi: 10.5281/zenodo.0000000
