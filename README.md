@@ -25,6 +25,8 @@ Full write-up with the threat model and per-tool mapping: [`docs/guide.md`](docs
 
 **Read this too:** every technique here can be bypassed — see [`docs/WEAKNESSES.md`](docs/WEAKNESSES.md) for exactly how, and what residual value each one keeps.
 
+**Why it's built this way:** [`docs/REA-anti-anti.md`](docs/REA-anti-anti.md) dissects how REA-style tools analyze (static extraction → runtime capture → AI reconstruction) and maps each defense to the exact analyzer it starves.
+
 ## Design rules (apply to every layer)
 1. **Combine layers.** Static obfuscation alone falls to runtime capture; anti-debug
    alone falls to static patching. Use static + dynamic + integrity together.
