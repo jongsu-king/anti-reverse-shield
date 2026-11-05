@@ -14,22 +14,47 @@
 extern "C" {
 #endif
 
-/* Returns true if a debugger is attached to this process. */
+/* --- detection ---------------------------------------------------------- */
+
+/* True if a debugger is attached to this process. */
 bool ars_is_debugged(void);
 
-/* Returns true if Frida / a dynamic instrumentation toolkit is detected. */
+/* True if Frida / a dynamic instrumentation toolkit is detected. */
 bool ars_frida_present(void);
 
-/* FNV-1a hash of this process's own on-disk executable.
- * Compare against a value baked in at release time to detect patching.
- * Returns 0 on failure to read the executable. */
+/* True if a hot libc function looks inline-hooked (detour prologue).
+ * Catches instrumentation that hides from /proc/self/maps. */
+bool ars_hooks_present(void);
+
+/* True if a timing probe is anomalously slow, implying single-step /
+ * breakpoint tracing is active. */
+bool ars_timing_anomaly(void);
+
+/* --- integrity ---------------------------------------------------------- */
+
+/* FNV-1a of this process's own on-disk executable (detects a patched file). */
 uint64_t ars_self_file_hash(void);
 
-/* Convenience: run all checks. Returns a bitmask of ARS_FLAG_* set. */
+/* FNV-1a of the in-memory executable segment (detects a RUNTIME patch that
+ * leaves the file intact). Returns 0 where unsupported (non-Linux for now). */
+uint64_t ars_text_hash(void);
+
+/* --- reaction ----------------------------------------------------------- */
+
+/* Indirect reaction helper. Do NOT exit() at a check — call this with a value
+ * your logic depends on. It jitters a short delay and perturbs the value so
+ * failure surfaces far from the detection site. */
+uint64_t ars_react(uint64_t value);
+
+/* --- aggregate ---------------------------------------------------------- */
+
 enum {
     ARS_FLAG_DEBUGGER = 1u << 0,
     ARS_FLAG_FRIDA    = 1u << 1,
+    ARS_FLAG_HOOK     = 1u << 2,
+    ARS_FLAG_TIMING   = 1u << 3,
 };
+/* Run all detectors; returns a bitmask of ARS_FLAG_*. */
 unsigned ars_scan(void);
 
 #ifdef __cplusplus

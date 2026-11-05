@@ -24,10 +24,11 @@ Defense-in-depth building blocks against automated reverse-engineering tooling
 
 | Platform | Directory | Covers |
 |----------|-----------|--------|
-| Native C/C++ (Linux/macOS/Win) | [`native/`](native)   | anti-debug, Frida detection, self-integrity hash, compile-time string encryption |
+| Native C/C++ (Linux/macOS/Win) | [`native/`](native)   | anti-debug, Frida detection, **inline-hook detection**, **timing-anomaly check**, on-disk **and in-memory** integrity hashes, compile-time string encryption, **indirect-reaction helper** |
 | Electron / JavaScript          | [`electron/`](electron) | V8 bytecode, obfuscation, Electron fuses, DevTools guard |
-| Android (APK)                  | [`android/`](android)  | debugger/root/emulator/Frida detection, signature check, cert pinning, R8 rules |
+| Android (APK)                  | [`android/`](android)  | debugger/root/emulator/Frida detection, signature check, cert pinning, R8 rules, **native JNI bridge** |
 | .NET (C#)                       | [`dotnet/`](dotnet)    | anti-debug, self-integrity hash, ConfuserEx config |
+| Server (reference)             | [`server/`](server)    | **HMAC + nonce + timestamp** request verification — the durable boundary |
 
 Full write-up with the threat model and per-tool mapping: [`docs/guide.md`](docs/guide.md).
 

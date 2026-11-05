@@ -55,7 +55,9 @@ uint64_t ars_self_file_hash(void) {
 
 unsigned ars_scan(void) {
     unsigned flags = 0;
-    if (ars_is_debugged())   flags |= ARS_FLAG_DEBUGGER;
-    if (ars_frida_present()) flags |= ARS_FLAG_FRIDA;
+    if (ars_is_debugged())    flags |= ARS_FLAG_DEBUGGER;
+    if (ars_frida_present())  flags |= ARS_FLAG_FRIDA;
+    if (ars_hooks_present())  flags |= ARS_FLAG_HOOK;
+    if (ars_timing_anomaly()) flags |= ARS_FLAG_TIMING;
     return flags;
 }
