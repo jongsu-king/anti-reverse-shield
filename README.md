@@ -42,6 +42,7 @@ Full write-up with the threat model and per-tool mapping: [`docs/guide.md`](docs
 | Doc | Language | What it is |
 |-----|----------|-----------|
 | [`docs/PRINCIPLES.md`](docs/PRINCIPLES.md)       | English | Mechanism / internals of every defense |
+| [`docs/DIAGRAMS.md`](docs/DIAGRAMS.md)           | 한국어 + ASCII | Mechanism diagrams drawn in text (hook detours, pin abort, CFG flattening, disk-vs-memory hash, evidence funnel) |
 | [`docs/guide.md`](docs/guide.md)                 | 한국어  | Conceptual, layered-defense guide |
 | [`docs/REA-anti-anti.md`](docs/REA-anti-anti.md) | 한국어  | REA pipeline dissection + per-analyzer counter-mapping |
 | [`docs/WEAKNESSES.md`](docs/WEAKNESSES.md)        | 한국어  | How each defense is bypassed + residual value |
