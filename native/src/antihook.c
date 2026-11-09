@@ -5,6 +5,9 @@
  *
  * Heuristic, x86-64. False positives are possible on exotic toolchains; this
  * is one signal among several, never a sole gate. */
+#if defined(__linux__) && !defined(_GNU_SOURCE)
+#define _GNU_SOURCE  /* glibc declares RTLD_DEFAULT in <dlfcn.h> only with this */
+#endif
 #include "shield.h"
 
 #if (defined(__linux__) || defined(__APPLE__)) && (defined(__x86_64__) || defined(_M_X64))
