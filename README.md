@@ -56,7 +56,17 @@ Full write-up with the threat model and per-tool mapping: [`docs/guide.md`](docs
 4. **Rotate / back up pins and keys.** A bricked app from an expired pin is a worse
    outcome than the threat.
 
-## Quick start (native)
+## Download (native SDK)
+
+Each [release](https://github.com/jongsu-king/anti-reverse-shield/releases/latest) carries a ready-to-link
+SDK - headers, static library, CMake package (`find_package(ars_shield)` → `ars::shield`) and demo - for
+Linux (x86-64, ARM64), macOS (Apple silicon, Intel) and Windows (x64, MSVC), with `SHA256SUMS.txt`.
+`scripts/update-sdk.sh` / `scripts/update-sdk.ps1` fetch the newest one for your platform, verify the
+checksum and replace your vendored copy; `--check` reports whether a newer release exists, and
+[docs/UPDATING.md](docs/UPDATING.md) has a weekly workflow that opens a pull request for you. (There is
+deliberately no run-time self-update inside your program - see the same page.)
+
+## Quick start (native, from source)
 ```bash
 cd native
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
