@@ -17,6 +17,7 @@ int main(void) {
     printf("frida         : %s\n", (flags & ARS_FLAG_FRIDA)    ? "DETECTED" : "clean");
     printf("inline hooks  : %s\n", (flags & ARS_FLAG_HOOK)     ? "DETECTED" : "clean");
     printf("timing anomaly: %s\n", (flags & ARS_FLAG_TIMING)   ? "DETECTED" : "clean");
+    printf("env injection : %s\n", (flags & ARS_FLAG_ENVINJECT)? "DETECTED" : "clean");
     printf("self file hash: %016llx\n", (unsigned long long)ars_self_file_hash());
     printf("text seg hash : %016llx\n", (unsigned long long)ars_text_hash());
 

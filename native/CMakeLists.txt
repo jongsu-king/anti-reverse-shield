@@ -10,6 +10,7 @@ add_library(ars_shield STATIC
     src/antihook.c
     src/timing.c
     src/react.c
+    src/envcheck.c
     src/integrity.c
     src/memhash.c)
 target_include_directories(ars_shield PUBLIC
@@ -53,3 +54,9 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/ars_shieldConfigVer
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ars_shieldConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/ars_shieldConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ars_shield)
+
+# ---- tests ----------------------------------------------------------------
+enable_testing()
+add_executable(ars_test tests/test_shield.c)
+target_link_libraries(ars_test PRIVATE ars_shield)
+add_test(NAME shield_checks COMMAND ars_test)

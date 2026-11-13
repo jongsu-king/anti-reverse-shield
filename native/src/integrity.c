@@ -59,5 +59,6 @@ unsigned ars_scan(void) {
     if (ars_frida_present())  flags |= ARS_FLAG_FRIDA;
     if (ars_hooks_present())  flags |= ARS_FLAG_HOOK;
     if (ars_timing_anomaly()) flags |= ARS_FLAG_TIMING;
+    if (ars_env_suspicious()) flags |= ARS_FLAG_ENVINJECT;
     return flags;
 }

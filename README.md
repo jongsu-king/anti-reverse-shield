@@ -24,7 +24,7 @@ Defense-in-depth building blocks against automated reverse-engineering tooling
 
 | Platform | Directory | Covers |
 |----------|-----------|--------|
-| Native C/C++ (Linux/macOS/Win) | [`native/`](native)   | anti-debug, Frida detection, **inline-hook detection**, **timing-anomaly check**, on-disk **and in-memory** integrity hashes, compile-time string encryption, **indirect-reaction helper** |
+| Native C/C++ (Linux/macOS/Win, x86-64+arm64) | [`native/`](native)   | anti-debug, Frida detection (maps **+ port scan**), inline-hook detection (**x86-64+arm64**), timing-anomaly check, **env-injection (LD_PRELOAD/DYLD) detection**, on-disk and in-memory integrity hashes, compile-time string encryption, indirect-reaction helper, **ctest suite** |
 | Electron / JavaScript          | [`electron/`](electron) | V8 bytecode, obfuscation, Electron fuses, DevTools guard |
 | Android (APK)                  | [`android/`](android)  | debugger/root/emulator/Frida detection, signature check, cert pinning, R8 rules, **native JNI bridge** |
 | .NET (C#)                       | [`dotnet/`](dotnet)    | anti-debug, self-integrity hash, ConfuserEx config |

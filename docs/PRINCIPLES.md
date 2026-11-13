@@ -207,3 +207,33 @@ controls, so it can be observed, patched, or lied to. The two defenses that do
    server-held data), the economic motive to reverse-engineer evaporates. This
    is the strongest "anti-anti" of all: it makes REA's output *correct but
    useless*.
+
+---
+
+## 10. Library-injection & Frida-port detection (v0.3.0)
+
+### 10.1 Loader-injection env vars — `ars_env_suspicious()`
+The dynamic loader honors environment variables that force an extra library to
+load before `main()`: `LD_PRELOAD` / `LD_AUDIT` (glibc) and
+`DYLD_INSERT_LIBRARIES` (macOS). That injected `.so`/`.dylib` can hook any
+symbol the moment the process starts — the cheapest instrumentation there is.
+The check simply reads those variables; if any is set and non-empty, the
+process was very likely launched with an injector. **Boundary:** an attacker who
+injects by other means (ptrace, a patched loader) leaves these unset, and the
+variables can be cleared after injection — so this is one signal among several.
+
+### 10.2 Frida default-port scan — `ars_frida_present()`
+Frida's agent, in its common server/gadget modes, listens on TCP **27042**
+(0x699A) and sometimes 27043. The detector parses `/proc/net/tcp` and
+`/proc/net/tcp6` for a socket in state `0A` (TCP_LISTEN) on those ports. This
+catches a Frida session that the `/proc/self/maps` string scan misses (e.g. an
+agent mapped under a renamed path). **Boundary:** Frida can be told to listen on
+a non-default port, which defeats the port scan — hence it runs *in addition to*
+the maps scan and the inline-hook prologue check, not instead of them.
+
+### 10.3 arm64 detour recognition — `ars_hooks_present()`
+On arm64 (Apple Silicon, most Android), an inline hook typically writes a
+literal-pool absolute jump — `LDR X16,#8` (`0x58000050`) then `BR X16`
+(`0xD61F0200`) followed by the 8-byte target — or a `B` immediate branch. The
+prologue check recognizes those encodings in addition to the x86-64 ones, so the
+same API works across both architectures.
